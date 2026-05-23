@@ -2,21 +2,23 @@ package com.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Simple Spring Boot Test Application
  * Tests basic REST API and Database connectivity
  */
 @SpringBootApplication
-@RestController
+@Controller
 public class SpringBootTest {
     
     /**
      * Health check endpoint
      */
     @GetMapping("/health")
+    @ResponseBody
     public String health() {
         return "Spring Boot is running! ✅";
     }
@@ -25,6 +27,7 @@ public class SpringBootTest {
      * Test endpoint with simple response
      */
     @GetMapping("/test")
+    @ResponseBody
     public String test() {
         return "Test endpoint working! ✅\n" +
                "Spring Boot Version: 3.2.0\n" +
@@ -33,17 +36,11 @@ public class SpringBootTest {
     }
     
     /**
-     * Welcome endpoint
+     * Serve the browser frontend
      */
     @GetMapping("/")
     public String welcome() {
-        return "Welcome to Hospital Management System REST API!\n" +
-               "Endpoints:\n" +
-               "  GET /health - Health check\n" +
-               "  GET /test - Test API\n" +
-               "  GET /api/users - List all patients\n" +
-               "  POST /api/users - Create new patient\n" +
-               "  GET /api/users/{id} - Get patient details";
+        return "forward:/index.html";
     }
     
     public static void main(String[] args) {
