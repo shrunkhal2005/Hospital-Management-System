@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Management System</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="bg-blobs blob-one"></div>
+  <div class="bg-blobs blob-two"></div>
+
+  <main class="shell">
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">Hospital Management System</p>
+        <h1>Deployed web dashboard for patients and users.</h1>
+        <p class="hero-copy">
+          This is the browser frontend for the same Spring Boot backend deployed on Render.
+          Add users, view records, and check service status from one page.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="refreshBtn" class="btn btn-primary">Refresh data</button>
+        <a class="btn btn-secondary" href="/health" target="_blank" rel="noreferrer">Health check</a>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="card stat-card">
+        <span class="stat-label">API Status</span>
+        <strong id="apiStatus" class="stat-value status-warn">Checking...</strong>
+      </article>
+      <article class="card stat-card">
+        <span class="stat-label">Total users</span>
+        <strong id="userCount" class="stat-value">0</strong>
+      </article>
+      <article class="card stat-card">
+        <span class="stat-label">Backend</span>
+        <strong class="stat-value">Spring Boot</strong>
+      </article>
+    </section>
+
+    <section class="grid-two">
+      <form id="userForm" class="card form-card">
+        <div class="section-title">
+          <h2>Add User</h2>
+          <p>Create a new hospital user record.</p>
+        </div>
+
+        <label>
+          Full name
+          <input id="fullName" type="text" placeholder="Jane Doe" required />
+        </label>
+        <label>
+          Username
+          <input id="username" type="text" placeholder="jane.doe" required />
+        </label>
+        <label>
+          Email
+          <input id="email" type="email" placeholder="jane@example.com" required />
+        </label>
+        <label>
+          Password
+          <input id="password" type="password" placeholder="optional if you want" />
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-full">Save user</button>
+        <p id="formMessage" class="message"></p>
+      </form>
+
+      <section class="card table-card">
+        <div class="section-title table-header">
+          <div>
+            <h2>Users</h2>
+            <p>Live data from <code>/api/users</code>.</p>
+          </div>
+          <input id="searchInput" class="search" type="search" placeholder="Search users" />
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

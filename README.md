@@ -1,131 +1,59 @@
 # Hospital Management System (HMS)
 
-A **JavaFX-based Hospital Management System** with **MySQL database integration** using pure JDBC.
+A Spring Boot hospital management backend with a deployable browser frontend.
 
-## 🚀 Quick Start
+## Live App
 
-### Step 1: Download MySQL JDBC Driver
+The deployed website is served from the Spring Boot app itself.
+
+- Homepage: `/`
+- Health: `/health`
+- Users API: `/api/users`
+
+## What is included
+
+- Browser UI for viewing, creating, searching, and deleting users
+- REST API for the same data
+- JavaFX desktop app still exists in the repo for local desktop use
+
+## Local run
 
 ```powershell
-# PowerShell command (run from d:\jfx)
-powershell -ExecutionPolicy Bypass -File .\Download-MySQLDriver.ps1
+C:\Users\Dell\.maven\maven-3.9.16\bin\mvn spring-boot:run
 ```
 
-**Alternative options:**
-- Manual: https://dev.mysql.com/downloads/connector/j/ (Download Connector/J 8.0.33)
-- MariaDB: `powershell -ExecutionPolicy Bypass -File .\Download-MySQLDriver.ps1 -UseMariaDB`
+Then open:
 
-### Step 2: Launch HMS
-
-```batch
-Launch-HMS.bat
+```text
+http://localhost:8080/
 ```
 
-### Step 3: Verify Connection
+## Deployment notes
 
-Check Admin Panel to confirm:
-- ✅ "MySQL Connected" = Data persists in database
-- ⚠️ "OFFLINE MODE" = Data stored in memory only
+The app is ready for Render or any Docker host.
 
----
+If you want database persistence on the hosted site, set these environment variables on the server:
 
-## 📊 Current Status
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
+- `PORT` if the platform requires it
 
-✅ **Ready:**
-- HMS application compiles and runs
-- MySQL Server 9.7 running
-- Database `jfx_db` created with schema
-- All UI features functional
+If those are not set, the app can still start with the embedded H2 fallback for demo use.
 
-⚠️ **Action Required:**
-- Download MySQL JDBC Driver (mysql-connector-java-8.0.33.jar)
-- Place in `d:\jfx\lib\` folder
+## Desktop launcher
 
----
+`Launch-HMS.bat` is the legacy local JavaFX launcher. It opens the desktop app, not the browser site.
 
-## 📁 Files & Commands
+## Main source files
 
-| File | Purpose |
-|------|---------|
-| `Launch-HMS.bat` | Smart launcher (finds driver automatically) |
-| `HMS-Status.bat` | Check system status and launch |
-| `Download-MySQLDriver.ps1` | Auto-download MySQL driver |
-| `HelloFX.java` | Main UI application |
-| `DatabaseConnection.java` | JDBC MySQL wrapper |
-| `setup.sql` | Database initialization |
+- `src/main/java/com/example/SpringBootTest.java` - backend and homepage entrypoint
+- `src/main/java/com/example/controller/UserController.java` - REST API
+- `src/main/resources/static/index.html` - browser frontend
+- `src/main/resources/static/app.js` - frontend API calls
+- `src/main/resources/static/styles.css` - frontend styling
 
-**Manual Commands:**
-```batch
-REM Compile
-javac --module-path javafx-sdk\javafx-sdk-21.0.2\lib --add-modules javafx.controls,javafx.graphics,javafx.fxml DatabaseConnection.java HelloFX.java
+## Status
 
-REM Run with MySQL
-java --module-path javafx-sdk\javafx-sdk-21.0.2\lib --add-modules javafx.controls,javafx.graphics,javafx.fxml -cp ".;lib\mysql-connector-java-8.0.33.jar" HelloFX
-
-REM Run offline
-java --module-path javafx-sdk\javafx-sdk-21.0.2\lib --add-modules javafx.controls,javafx.graphics,javafx.fxml HelloFX
-```
-
-## Database Credentials
-
-```
-Server:   localhost:3306
-Database: jfx_db
-Username: root
-Password: shrunkhal@2005
-```
-
-## ONLINE vs OFFLINE Mode
-
-| Feature | ONLINE | OFFLINE |
-|---------|--------|---------|
-| Data Persists | ✅ Yes (MySQL) | ❌ No (Memory) |
-| Multiple Users | ✅ Yes | ❌ No |
-| Survives Restart | ✅ Yes | ❌ No |
-| MySQL Driver Needed | ✅ Required | ❌ Not needed |
-
-## Troubleshooting
-
-### "Failed to save patient to database"
-- **Cause**: Running in OFFLINE MODE (driver missing)
-- **Solution**: Download MySQL JDBC Driver
-
-### "Connection refused" error
-- **Cause**: MySQL Server not running
-- **Solution**: Start MySQL (Services → MySQL Server 9.7)
-
-### "Access denied for user 'root'"
-- **Cause**: Wrong credentials
-- **Solution**: Check DatabaseConnection.java line 7-8
-
-### JAR file not found after download
-- **Cause**: JAR in wrong location
-- **Solution**: Ensure file is in `d:\jfx\lib\mysql-connector-java-8.0.33.jar`
-
-## Architecture
-
-**DatabaseConnection.java** - JDBC wrapper handling all MySQL operations:
-- `connect()` - Opens connection, creates tables
-- `addPatient()` - Insert patient with error messages
-- `getAllPatients()` - Query all patients
-- `searchPatients()` - Search in database
-- `deletePatient()` - Remove record
-- `isConnected()` - Connection status
-
-**HelloFX.java** - JavaFX UI with database integration:
-- Patient intake form with validation
-- Real-time search against database
-- Admin panel with connection status
-- Patient queue table
-
-## Next Steps
-
-1. **Download Driver**: `powershell -ExecutionPolicy Bypass -File .\Download-MySQLDriver.ps1`
-2. **Launch HMS**: `Launch-HMS.bat`
-3. **Verify**: Check Admin Panel for "✅ MySQL Connected"
-4. **Test**: Add patient and verify data persists after restart
-
----
-
-**Status**: All components ready - just need MySQL JDBC driver! 🚀
+The project now includes both the backend and a real web frontend that can be deployed publicly.
 
