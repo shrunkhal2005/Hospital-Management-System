@@ -11,12 +11,64 @@ const elements = {
   form: document.getElementById('userForm'),
   formMessage: document.getElementById('formMessage'),
   refreshBtn: document.getElementById('refreshBtn'),
+  healthBtn: document.getElementById('healthBtn'),
   searchInput: document.getElementById('searchInput'),
   fullName: document.getElementById('fullName'),
   username: document.getElementById('username'),
   email: document.getElementById('email'),
   password: document.getElementById('password')
 };
+
+function showModal(title, content) {
+  const root = document.getElementById('modal-root');
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed';
+  overlay.style.left = 0;
+  overlay.style.top = 0;
+  overlay.style.right = 0;
+  overlay.style.bottom = 0;
+  overlay.style.background = 'rgba(0,0,0,0.6)';
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.zIndex = 1000;
+
+  const panel = document.createElement('div');
+  panel.style.background = '#0f1724';
+  panel.style.color = '#e6eef8';
+  panel.style.padding = '18px';
+  panel.style.borderRadius = '8px';
+  panel.style.maxWidth = '720px';
+  panel.style.width = '90%';
+  panel.style.boxShadow = '0 8px 32px rgba(0,0,0,0.6)';
+
+  const h = document.createElement('h3');
+  h.textContent = title;
+  h.style.marginTop = '0';
+  h.style.marginBottom = '8px';
+
+  const pre = document.createElement('pre');
+  pre.style.whiteSpace = 'pre-wrap';
+  pre.style.wordBreak = 'break-word';
+  pre.style.margin = 0;
+  pre.style.fontFamily = 'inherit';
+  pre.textContent = content;
+
+  const close = document.createElement('button');
+  close.textContent = 'Close';
+  close.className = 'btn';
+  close.style.marginTop = '12px';
+
+  close.addEventListener('click', () => {
+    root.removeChild(overlay);
+  });
+
+  panel.appendChild(h);
+  panel.appendChild(pre);
+  panel.appendChild(close);
+  overlay.appendChild(panel);
+  root.appendChild(overlay);
+}
 
 function setStatus(text, className) {
   elements.apiStatus.textContent = text;
@@ -130,6 +182,26 @@ async function checkHealth() {
   } catch (error) {
     setStatus('API offline', 'status-bad');
   }
+}
+
+if (elements.healthBtn) {
+  elements.healthBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    elements.healthBtn.disabled = true;
+    elements.healthBtn.textContent = 'Checking...';
+    try {
+      const result = await request('/health');
+      const body = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
+      showModal('Service Health', body);
+      setStatus('API online', 'status-ok');
+    } catch (err) {
+      showModal('Service Health', `Error: ${err.message}`);
+      setStatus('API offline', 'status-bad');
+    } finally {
+      elements.healthBtn.disabled = false;
+      elements.healthBtn.textContent = 'Health check';
+    }
+  });
 }
 
 async function loadUsers() {
